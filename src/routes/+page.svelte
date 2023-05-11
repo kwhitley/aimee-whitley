@@ -1,76 +1,84 @@
 <script>
   import { pageTitle } from '~/utils/pageTitle'
+  import '~/styles/app.scss'
+  import { onInterval } from '~/utils/onInterval'
   import { fade } from 'svelte/transition'
-	import Margarita from '~/components/icons/Margarita.svelte'
+  import humanizeDuration from 'humanize-duration'
+
+  const WEDDING_DATE = new Date('2023-09-16T18:00:00-05:00')
+  let now = Date.now()
+  $: duration = +WEDDING_DATE - now
+  $: durationString = humanizeDuration(duration, { round: true })
+  $: durationHtml = durationString
+                      .replace(/([\d\.]+)/g, '<b>$1</b>')
+                      .split(',')
+                      .map(section => `<span>${section}</span> `)
+                      .join('')
+
+  const updateDuration = () => {
+    now = Date.now()
+  }
+
+  onInterval(updateDuration)
 </script>
 
 <!-- HEAD -->
 <svelte:head>
   <title>{pageTitle()}</title>
-  <meta name="description" content="Wedding details for Aimee & Kevin." />
+  <meta name="description" content="Aimee's countdown." />
 </svelte:head>
 
 <!-- MARKUP -->
-<main class="splash">
-  <section in:fade={{ duration: 500, delay: 100 }}>
-    <strong>the wedding of</strong>
+<main>
 
-    <h1>
-      Aimee Housinger<br />
-      Kevin Whitley
-    </h1>
-  </section>
+  <h1>Time until this is true:</h1>
+  <h2>{@html durationHtml}</h2>
 
-  <section class="details">
-    <h2>Ceremony</h2>
-    Saturday, September 16th, 2023<br />
-    6:00 p.m.<br />
-
-    <br />
-
-    <a href="https://www.astorianevents.com/">The Astorian</a><br />
-    2500 Summer Street<br />
-    Houston, Texas 77007<br />
-  </section>
-
-  <hr />
-
-  <section>
-    Reception to follow
-  </section>
 </main>
 
 <!-- STYLES -->
 <style lang="scss">
-  .splash {
-    margin-top: 2rem;
+  main {
+    height: 75%;
     display: flex;
     flex-flow: column;
-    gap: 3rem;
     align-items: center;
-    text-align: center;
-  }
-
-  strong {
-    font-weight: normal;
+    justify-content: center;
+    padding: 2rem;
   }
 
   h1 {
+    font-weight: 200;
     text-align: center;
-    position: relative;
-
-    &:before {
-      content: '&';
-      font-size: 4em;
-      position: absolute;
-      margin-left: -25%;
-      left: 50%;
-      top: 50%;
-      color: var(--foreground-25);
-    }
+    color: rgba(0,0,50,0.3);
   }
 
-  hr {
-    margin: 0;
+  h2 {
+    text-align: center;
+    font-family: fancy;
+    font-size: clamp(1rem, 6vw, 2rem);
+    color: rgba(0,0,50,0.5);
+  }
+
+  :global(h2) {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    column-gap: 1em;
+    row-gap: 0.5em;
+  }
+
+  :global(h2 span) {
+    display: flex;
+    flex-flow: column;
+  }
+
+  :global(h2 b) {
+    font-size: 3em;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 100;
+    letter-spacing: -0.05em;
+    line-height: 0.6em;
+    color: rgba(0,0,50,0.8);
   }
 </style>
