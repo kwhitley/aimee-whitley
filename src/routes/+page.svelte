@@ -1,9 +1,8 @@
 <script>
-  import { pageTitle } from '~/utils/pageTitle'
+  import humanizeDuration from 'humanize-duration'
   import '~/styles/app.scss'
   import { onInterval } from '~/utils/onInterval'
-  import { fade } from 'svelte/transition'
-  import humanizeDuration from 'humanize-duration'
+  import { pageTitle } from '~/utils/pageTitle'
 
   const WEDDING_DATE = new Date('2023-09-16T18:00:00-05:00')
   let now = Date.now()
@@ -15,11 +14,7 @@
                       .map(section => `<span>${section}</span> `)
                       .join('')
 
-  const updateDuration = () => {
-    now = Date.now()
-  }
-
-  onInterval(updateDuration)
+  onInterval(() => now = Date.now())
 </script>
 
 <!-- HEAD -->
@@ -30,10 +25,8 @@
 
 <!-- MARKUP -->
 <main>
-
   <h1>Time until this is true:</h1>
   <h2>{@html durationHtml}</h2>
-
 </main>
 
 <!-- STYLES -->
