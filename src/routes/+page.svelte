@@ -8,11 +8,9 @@
   let now = Date.now()
   $: duration = +WEDDING_DATE - now
   $: durationString = humanizeDuration(duration, { round: true })
-  $: durationHtml = durationString
-                      .replace(/([\d\.]+)/g, '<b>$1</b>')
-                      .split(',')
-                      .map(section => `<span>${section}</span> `)
-                      .join('')
+  $: durations = durationString
+                      .split(/\s*,\s/)
+                      .map(s => s.split(' '))
 
   onInterval(() => now = Date.now())
 </script>
@@ -26,7 +24,14 @@
 <!-- MARKUP -->
 <main>
   <h1>Time until this is true:</h1>
-  <h2>{@html durationHtml}</h2>
+  <h2>
+    {#each durations as [value, units]}
+      <span>
+        <b>{value}</b>
+        {units}
+      </span>
+    {/each}
+  </h2>
 </main>
 
 <!-- STYLES -->
@@ -51,9 +56,6 @@
     font-family: fancy;
     font-size: clamp(1rem, 6vw, 2rem);
     color: rgba(0,0,50,0.5);
-  }
-
-  :global(h2) {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
@@ -61,12 +63,12 @@
     row-gap: 0.5em;
   }
 
-  :global(h2 span) {
+  span {
     display: flex;
     flex-flow: column;
   }
 
-  :global(h2 b) {
+  b {
     font-size: 3em;
     font-family: 'Times New Roman', Times, serif;
     font-weight: 100;
