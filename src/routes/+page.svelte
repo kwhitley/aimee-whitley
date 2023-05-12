@@ -5,11 +5,16 @@
   import { pageTitle } from '~/utils/pageTitle'
 
   const WEDDING_DATE = new Date('2023-09-16T18:00:00-05:00')
+
+  // local state variable
   let now = Date.now()
+
+  // durations is derived from the local "now" state
   $: durations = humanizeDuration(+WEDDING_DATE - now, { round: true })
                   .split(/\s*,\s/)
                   .map(s => s.split(' '))
 
+  // set up the interval on mount
   onInterval(() => now = Date.now())
 </script>
 
