@@ -6,11 +6,9 @@
 
   const WEDDING_DATE = new Date('2023-09-16T18:00:00-05:00')
   let now = Date.now()
-  $: duration = +WEDDING_DATE - now
-  $: durationString = humanizeDuration(duration, { round: true })
-  $: durations = durationString
-                      .split(/\s*,\s/)
-                      .map(s => s.split(' '))
+  $: durations = humanizeDuration(+WEDDING_DATE - now, { round: true })
+                  .split(/\s*,\s/)
+                  .map(s => s.split(' '))
 
   onInterval(() => now = Date.now())
 </script>
