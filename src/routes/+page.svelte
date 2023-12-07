@@ -21,12 +21,12 @@
 <!-- HEAD -->
 <svelte:head>
   <title>{pageTitle()}</title>
-  <meta name="description" content="Aimee's countdown." />
+  <meta name="description" content="Aimee " />
 </svelte:head>
 
 <!-- MARKUP -->
 <main>
-  <h1>Time until this is true:</h1>
+  <h1>We've been married for:</h1>
   <h2>
     {#each durations as [value, units]}
       <span>
